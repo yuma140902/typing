@@ -29,6 +29,6 @@ Promise.all([f1.load(), f2.load()]).then(([f1, f2]) => {
   document.fonts.add(f1);
   document.fonts.add(f2);
   initEventHandlers(gameState, renderer.onGameStateUpdate);
-  gameState.phase = 'title';
+  gameState.phase = { tag: 'title' };
   renderer.onGameStateUpdate();
 });

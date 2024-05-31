@@ -4,10 +4,7 @@ import { type Theme } from './theme';
 import { durationBetween, timeNow } from './time';
 
 const needAnimation = (state: GameState) => {
-  return (
-    state.phase === 'title' ||
-    (state.phase === 'playing' && state.obj !== undefined)
-  );
+  return state.phase.tag === 'title';
 };
 
 export const getRenderer = (
@@ -48,7 +45,7 @@ export const getRenderer = (
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = theme.foreground;
 
-    if (gameState.phase === 'title') {
+    if (gameState.phase.tag === 'title') {
       renderTitleScreen();
     }
 
