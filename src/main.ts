@@ -1,10 +1,7 @@
 import './style.css';
 import 'ress/ress.css';
 import { type Theme } from './theme';
-
-type GameState = {
-  phase: 'title' | 'playing';
-};
+import { initialGameState, type GameState } from './game_state';
 
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   <div>
@@ -19,9 +16,7 @@ const theme: Theme = {
   background: '#282c34',
 };
 
-let gameState: GameState = {
-  phase: 'title',
-};
+let gameState = initialGameState();
 
 const getRenderer = (
   ctx: CanvasRenderingContext2D,
