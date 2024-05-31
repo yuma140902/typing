@@ -42,7 +42,7 @@ const buildLetterTimeline = (
 
   let s = '';
   let elements = [];
-  let prevX = x;
+  let prevPos = { x, y: y - 48 };
 
   const linear = (start: TimeMs, duration: DurationMs): Easing => ({
     type: {
@@ -55,6 +55,8 @@ const buildLetterTimeline = (
 
   for (let i = 0; i < letters.length; i++) {
     const width = ctx.measureText(s).width;
+    const nextX = x + width;
+    const nextPos = { x: nextX, y: prevPos.y };
 
     const rect: Rectangle = {
       tag: 'rectangle',
@@ -62,14 +64,8 @@ const buildLetterTimeline = (
       height: 60,
       color: 'primary',
       position: {
-        from: {
-          x: prevX,
-          y: y - 48,
-        },
-        to: {
-          x: x + width,
-          y: y - 48,
-        },
+        from: prevPos,
+        to: nextPos,
         easing: linear(timeAfter(start, ms(i * delay)), ms(delay * 0.75)),
       },
     };
@@ -81,7 +77,7 @@ const buildLetterTimeline = (
 
     const chara: TitleCharacter = {
       tag: 'title-character',
-      position: { x: x + width, y },
+      position: { x: nextX, y },
       character: letters[i],
     };
     elements.push({
@@ -90,7 +86,7 @@ const buildLetterTimeline = (
       obj: chara,
     });
 
-    prevX = x + width;
+    prevPos = nextPos;
     s += letters[i];
   }
 
@@ -101,13 +97,10 @@ const buildLetterTimeline = (
     height: 60,
     color: 'primary',
     position: {
-      from: {
-        x: prevX,
-        y: y - 48,
-      },
+      from: prevPos,
       to: {
         x: x + widthLast,
-        y: y - 48,
+        y: prevPos.y,
       },
       easing: linear(timeAfter(start, ms(letters.length * delay)), ms(delay)),
     },
