@@ -4,7 +4,6 @@ import { type Theme } from './theme';
 import { initialGameState } from './game_state';
 import { getRenderer } from './render';
 import { initEventHandlers } from './input';
-import { timeNow } from './time';
 
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   <div>

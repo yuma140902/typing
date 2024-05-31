@@ -4,21 +4,26 @@ import { type DurationMs, type TimeMs } from './time';
  * イージング
  */
 export type Easing = {
+  type: EasingType;
   // イージングの開始時刻
   start: TimeMs;
   // イージングの長さ
   duration: DurationMs;
-  type: EasingType;
 };
 
 /**
  * イージング関数の種類
  */
 export type EasingType =
-  | 'linear'
-  | 'easeInQuad'
-  | 'easeOutQuad'
-  | 'easeInOutQuad';
+  | {
+      tag: 'fixed';
+    }
+  | {
+      tag: 'linear' | 'easeInQuad' | 'easeOutQuad' | 'easeInOutQuad';
+      sanitizer: {
+        tag: 'clamp' | 'wrap';
+      };
+    };
 
 /**
  * 時間によって変化する値
@@ -42,14 +47,23 @@ export const easing = (
   easing: Easing,
   now: TimeMs,
 ): number => {
-  const current = Math.min(1, (now - easing.start) / easing.duration);
-  if (easing.type === 'linear') {
+  if (easing.type.tag === 'fixed') {
+    return from;
+  }
+
+  const currentUnsanitized = (now - easing.start) / easing.duration;
+  const current =
+    easing.type.sanitizer.tag === 'clamp'
+      ? Math.min(1, Math.max(0, currentUnsanitized))
+      : currentUnsanitized % 1;
+
+  if (easing.type.tag === 'linear') {
     return from + (to - from) * current;
-  } else if (easing.type === 'easeInQuad') {
+  } else if (easing.type.tag === 'easeInQuad') {
     return from + (to - from) * current ** 2;
-  } else if (easing.type == 'easeOutQuad') {
+  } else if (easing.type.tag == 'easeOutQuad') {
     return from + (to - from) * (1 - (1 - current) ** 2);
-  } else if (easing.type == 'easeInOutQuad') {
+  } else if (easing.type.tag == 'easeInOutQuad') {
     if (current < 0.5) {
       return from + (to - from) * (2 * current ** 2);
     } else {

@@ -1,10 +1,10 @@
 import { getFpsCounter } from './debug_fps';
-import { animatePoint } from './easing';
+import { type Easing, animatePoint } from './easing';
 import {
   type Rectangle,
   type GameObject,
   type TitleCharacter,
-  TextBlock,
+  type TextBlock,
 } from './game_object';
 import { type GameState } from './game_state';
 import { type Theme } from './theme';
@@ -44,6 +44,15 @@ const buildLetterTimeline = (
   let elements = [];
   let prevX = x;
 
+  const linear = (start: TimeMs, duration: DurationMs): Easing => ({
+    type: {
+      tag: 'linear',
+      sanitizer: { tag: 'clamp' },
+    },
+    start,
+    duration,
+  });
+
   for (let i = 0; i < letters.length; i++) {
     const width = ctx.measureText(s).width;
 
@@ -61,11 +70,7 @@ const buildLetterTimeline = (
           x: x + width,
           y: y - 48,
         },
-        easing: {
-          type: 'linear',
-          start: timeAfter(start, ms(i * delay)),
-          duration: ms(delay * 0.75),
-        },
+        easing: linear(timeAfter(start, ms(i * delay)), ms(delay * 0.75)),
       },
     };
     elements.push({
@@ -104,11 +109,7 @@ const buildLetterTimeline = (
         x: x + widthLast,
         y: y - 48,
       },
-      easing: {
-        type: 'linear',
-        start: timeAfter(start, ms(letters.length * delay)),
-        duration: ms(delay),
-      },
+      easing: linear(timeAfter(start, ms(letters.length * delay)), ms(delay)),
     },
   };
   elements.push({
