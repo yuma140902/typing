@@ -29,4 +29,4 @@ export const durationBetween = (
 export const timeAfter = (current: TimeMs, duration: DurationMs): TimeMs =>
   (current + duration) as TimeMs;
 
-export const msAsDuration = (ms: number): DurationMs => ms as DurationMs;
+export const ms = (ms: number): DurationMs => ms as DurationMs;

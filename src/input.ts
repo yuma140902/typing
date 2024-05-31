@@ -8,6 +8,7 @@ export const initEventHandlers = (
     const canvas = document.querySelector<HTMLCanvasElement>('#canvas')!;
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
+    notifyGameStateUpdate();
   });
 
   window.addEventListener('keydown', (event) => {
