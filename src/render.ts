@@ -29,11 +29,15 @@ const buildLetterTimeline = (
   ctx: CanvasRenderingContext2D,
   text: string,
   start: TimeMs,
-  x: number,
-  y: number,
+  canvasWidth: number,
+  canvasHeight: number,
   delay: DurationMs,
 ): Timeline<GameObject> => {
   const letters = text.split('');
+
+  const widthAll = ctx.measureText(text).width;
+  const x = canvasWidth / 2 - widthAll / 2;
+  const y = canvasHeight / 2;
 
   let s = '';
   let elements = [];
@@ -83,7 +87,7 @@ const buildLetterTimeline = (
     s += letters[i];
   }
 
-  const width = ctx.measureText(s).width;
+  const widthLast = ctx.measureText(s).width;
   const rect: Rectangle = {
     tag: 'rectangle',
     width: 4,
@@ -94,7 +98,7 @@ const buildLetterTimeline = (
         y: y - 48,
       },
       to: {
-        x: x + width,
+        x: x + widthLast,
         y: y - 48,
       },
       easing: {
@@ -109,6 +113,7 @@ const buildLetterTimeline = (
     disappearAt: timeAfter(start, ms(Infinity)),
     obj: rect,
   });
+
   return { elements };
 };
 
@@ -153,10 +158,10 @@ export const getRenderer = (
     ctx.font = '48px IBMPlexSans, IBMPlexSansJP';
     let timeline = buildLetterTimeline(
       ctx,
-      'タイピングゲーム: Typing',
+      'タイピングゲーム: Mini Typing',
       timeAfter(timeNow(), ms(0)),
-      200,
-      200,
+      canvas.width,
+      canvas.height,
       ms(250),
     );
 
