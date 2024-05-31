@@ -13,20 +13,19 @@ export type TimelineElement<T> = {
 /**
  * タイムラインから有効な要素を取得する
  */
-export const listTimelineElements = <T>(now: TimeMs) => {
-  return (timeline: Timeline<T>) =>
-    timeline.elements.filter(
-      (element) => element.appearAt <= now && now < element.disappearAt,
-    );
-};
+export const listTimelineElements = <T>(
+  timeline: Timeline<T>,
+  now: TimeMs,
+): T[] =>
+  timeline.elements
+    .filter((element) => element.appearAt <= now && now < element.disappearAt)
+    .map((element) => element.obj);
 
 /**
  * タイムラインから時間が過ぎた要素を削除する
  */
-export const maintainTimeline = <T>(now: TimeMs) => {
-  return (timeline: Timeline<T>) => {
-    timeline.elements = timeline.elements.filter(
-      (element) => element.disappearAt > now,
-    );
-  };
+export const maintainTimeline = <T>(timeline: Timeline<T>, now: TimeMs) => {
+  timeline.elements = timeline.elements.filter(
+    (element) => element.disappearAt > now,
+  );
 };

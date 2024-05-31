@@ -1,5 +1,3 @@
-import { type Rectangle } from './game_object';
-
 /**
  * ゲームの状態
  */
@@ -9,7 +7,9 @@ export type GameState = {
 
 export type GamePhase = LoadingPhase | TitlePhase | PlayingPhase;
 export type LoadingPhase = { tag: 'loading' };
-export type TitlePhase = { tag: 'title' };
+export type TitlePhase = {
+  tag: 'title';
+};
 export type PlayingPhase = { tag: 'playing' };
 
 /**

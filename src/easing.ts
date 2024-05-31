@@ -24,7 +24,7 @@ export type EasingType =
  * 時間によって変化する値
  */
 export type EasingValue<T> = {
-  animation: Easing;
+  easing: Easing;
   from: T;
   to: T;
 };
@@ -65,7 +65,7 @@ export const animateNumber = (
   value: EasingValue<number>,
   now: TimeMs,
 ): number => {
-  return easing(value.from, value.to, value.animation, now);
+  return easing(value.from, value.to, value.easing, now);
 };
 
 export const animatePoint = (
@@ -73,7 +73,7 @@ export const animatePoint = (
   now: TimeMs,
 ): { x: number; y: number } => {
   return {
-    x: easing(value.from.x, value.to.x, value.animation, now),
-    y: easing(value.from.y, value.to.y, value.animation, now),
+    x: easing(value.from.x, value.to.x, value.easing, now),
+    y: easing(value.from.y, value.to.y, value.easing, now),
   };
 };
