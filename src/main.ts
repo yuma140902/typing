@@ -1,10 +1,7 @@
 import './style.css';
 import 'ress/ress.css';
+import { type Theme } from './theme';
 
-type Theme = {
-  foreground: string;
-  background: string;
-};
 type GameState = {
   phase: 'title' | 'playing';
 };
