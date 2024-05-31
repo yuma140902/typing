@@ -4,6 +4,7 @@ import {
   type Rectangle,
   type GameObject,
   type TitleCharacter,
+  TextBlock,
 } from './game_object';
 import { type GameState } from './game_state';
 import { type Theme } from './theme';
@@ -50,6 +51,7 @@ const buildLetterTimeline = (
       tag: 'rectangle',
       width: 4,
       height: 60,
+      color: 'primary',
       position: {
         from: {
           x: prevX,
@@ -60,9 +62,9 @@ const buildLetterTimeline = (
           y: y - 48,
         },
         easing: {
-          type: 'easeOutQuad',
+          type: 'linear',
           start: timeAfter(start, ms(i * delay)),
-          duration: ms(delay),
+          duration: ms(delay * 0.75),
         },
       },
     };
@@ -78,7 +80,7 @@ const buildLetterTimeline = (
       character: letters[i],
     };
     elements.push({
-      appearAt: timeAfter(start, ms(i * delay + delay * 1.5)),
+      appearAt: timeAfter(start, ms(i * delay + delay * (1 + 0.75 / 2))),
       disappearAt: timeAfter(start, ms(Infinity)),
       obj: chara,
     });
@@ -92,6 +94,7 @@ const buildLetterTimeline = (
     tag: 'rectangle',
     width: 4,
     height: 60,
+    color: 'primary',
     position: {
       from: {
         x: prevX,
@@ -112,6 +115,22 @@ const buildLetterTimeline = (
     appearAt: timeAfter(start, ms(letters.length * delay)),
     disappearAt: timeAfter(start, ms(Infinity)),
     obj: rect,
+  });
+
+  const startText = 'スペースキーを押してスタート';
+  const startTextWidth = ctx.measureText(startText).width;
+  const startTextBlock: TextBlock = {
+    tag: 'text-block',
+    position: {
+      x: canvasWidth / 2 - startTextWidth / 2,
+      y: (canvasHeight * 3) / 4,
+    },
+    text: startText,
+  };
+  elements.push({
+    appearAt: timeAfter(start, ms(letters.length * delay + delay)),
+    disappearAt: timeAfter(start, ms(Infinity)),
+    obj: startTextBlock,
   });
 
   return { elements };
@@ -158,7 +177,7 @@ export const getRenderer = (
     ctx.font = '48px IBMPlexSans, IBMPlexSansJP';
     let timeline = buildLetterTimeline(
       ctx,
-      'タイピングゲーム: Mini Typing',
+      'タイピングゲーム: Mini Typing (仮称)',
       timeAfter(timeNow(), ms(0)),
       canvas.width,
       canvas.height,
@@ -177,9 +196,12 @@ export const getRenderer = (
             element.position.y,
           );
         } else if (element.tag === 'rectangle') {
-          ctx.fillStyle = theme.primary;
+          ctx.fillStyle = theme[element.color];
           const { x, y } = animatePoint(element.position, timeNow());
           ctx.fillRect(x, y, element.width, element.height);
+        } else if (element.tag === 'text-block') {
+          ctx.fillStyle = theme.foreground;
+          ctx.fillText(element.text, element.position.x, element.position.y);
         }
       }
     };
