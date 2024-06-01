@@ -8,19 +8,13 @@ import {
 import { type Rectangle, type GameObject, type TextBlock } from './game_object';
 import { type GameState } from './game_state';
 import { type Theme } from './theme';
-import {
-  type TimeMs,
-  durationBetween,
-  ms,
-  timeAfter,
-  timeNow,
-  DurationMs,
-} from './time';
+import { time } from './util';
 import {
   type Timeline,
   listTimelineElements,
   maintainTimeline,
 } from './timeline';
+import { type Time, type Duration } from './util/time';
 
 const needAnimation = (state: GameState) => {
   return state.phase.tag === 'title';
@@ -29,10 +23,10 @@ const needAnimation = (state: GameState) => {
 const buildLetterTimeline = (
   ctx: CanvasRenderingContext2D,
   text: string,
-  start: TimeMs,
+  start: Time,
   canvasWidth: number,
   canvasHeight: number,
-  delay: DurationMs,
+  delay: time.Duration,
 ): Timeline<GameObject> => {
   const letters = text.split('');
 
@@ -44,7 +38,7 @@ const buildLetterTimeline = (
   let elements = [];
   let prevPos = { x, y: y - 48 };
 
-  const linear = (start: TimeMs, duration: DurationMs): Easing => ({
+  const linear = (start: Time, duration: Duration): Easing => ({
     type: {
       tag: 'linear',
       sanitizer: { tag: 'clamp' },
@@ -56,7 +50,7 @@ const buildLetterTimeline = (
     return {
       from: value,
       to: value,
-      easing: { type: { tag: 'fixed' }, start, duration: ms(0) },
+      easing: { type: { tag: 'fixed' }, start, duration: time.ms(0) },
     };
   };
   const font = '48px IBMPlexSans, IBMPlexSansJP';
@@ -74,12 +68,15 @@ const buildLetterTimeline = (
       position: {
         from: prevPos,
         to: nextPos,
-        easing: linear(timeAfter(start, ms(i * delay)), ms(delay * 0.75)),
+        easing: linear(
+          time.after(start, time.ms(i * delay)),
+          time.ms(delay * 0.75),
+        ),
       },
     };
     elements.push({
-      appearAt: timeAfter(start, ms(i * delay)),
-      disappearAt: timeAfter(start, ms(i * delay + delay)),
+      appearAt: time.after(start, time.ms(i * delay)),
+      disappearAt: time.after(start, time.ms(i * delay + delay)),
       obj: rect,
     });
 
@@ -91,8 +88,8 @@ const buildLetterTimeline = (
       text: letters[i],
     };
     elements.push({
-      appearAt: timeAfter(start, ms(i * delay + delay * (1 + 0.75 / 2))),
-      disappearAt: timeAfter(start, ms(Infinity)),
+      appearAt: time.after(start, time.ms(i * delay + delay * (1 + 0.75 / 2))),
+      disappearAt: time.after(start, time.ms(Infinity)),
       obj: chara,
     });
 
@@ -112,12 +109,15 @@ const buildLetterTimeline = (
         x: x + widthLast,
         y: prevPos.y,
       },
-      easing: linear(timeAfter(start, ms(letters.length * delay)), ms(delay)),
+      easing: linear(
+        time.after(start, time.ms(letters.length * delay)),
+        time.ms(delay),
+      ),
     },
   };
   elements.push({
-    appearAt: timeAfter(start, ms(letters.length * delay)),
-    disappearAt: timeAfter(start, ms(letters.length * delay + 1000)),
+    appearAt: time.after(start, time.ms(letters.length * delay)),
+    disappearAt: time.after(start, time.ms(letters.length * delay + 1000)),
     obj: lastCursor,
   });
 
@@ -139,8 +139,8 @@ const buildLetterTimeline = (
       from: 4,
       to: startTextWidth,
       easing: linear(
-        timeAfter(start, ms(letters.length * delay + 1000)),
-        ms(delay),
+        time.after(start, time.ms(letters.length * delay + 1000)),
+        time.ms(delay),
       ),
     },
     height: fixed(60),
@@ -152,19 +152,19 @@ const buildLetterTimeline = (
         y: (canvasHeight * 3) / 4 - 48,
       },
       easing: linear(
-        timeAfter(start, ms(letters.length * delay + 1000)),
-        ms(delay),
+        time.after(start, time.ms(letters.length * delay + 1000)),
+        time.ms(delay),
       ),
     },
   };
   elements.push({
-    appearAt: timeAfter(start, ms(letters.length * delay + 1000)),
-    disappearAt: timeAfter(start, ms(Infinity)),
+    appearAt: time.after(start, time.ms(letters.length * delay + 1000)),
+    disappearAt: time.after(start, time.ms(Infinity)),
     obj: startTextRect,
   });
   elements.push({
-    appearAt: timeAfter(start, ms(letters.length * delay + 1000)),
-    disappearAt: timeAfter(start, ms(Infinity)),
+    appearAt: time.after(start, time.ms(letters.length * delay + 1000)),
+    disappearAt: time.after(start, time.ms(Infinity)),
     obj: startTextBlock,
   });
 
@@ -175,7 +175,7 @@ const renderGameObject = (
   ctx: CanvasRenderingContext2D,
   theme: Theme,
   obj: GameObject,
-  now: TimeMs,
+  now: Time,
 ) => {
   if (obj.strokeColor) {
     ctx.strokeStyle = theme[obj.strokeColor];
@@ -194,7 +194,7 @@ const renderGameObject = (
 const renderRectangle = (
   ctx: CanvasRenderingContext2D,
   rect: Rectangle,
-  now: TimeMs,
+  now: Time,
 ) => {
   const { x, y } = animatePoint(rect.position, now);
   const width = animateNumber(rect.width, now);
@@ -205,7 +205,7 @@ const renderRectangle = (
 const renderTextBlock = (
   ctx: CanvasRenderingContext2D,
   textBlock: TextBlock,
-  now: TimeMs,
+  now: Time,
 ) => {
   if (textBlock.font) {
     ctx.font = textBlock.font;
@@ -231,7 +231,7 @@ export const getRenderer = (
   const ctx = canvas.getContext('2d')!;
   //const initialTime = timeNow();
   const fpsCounter = getFpsCounter();
-  let prevTime = timeNow();
+  let prevTime = time.now();
   let tick = 0;
   let renderLoadingScreen: (() => void) | undefined;
   let renderTitleScreen: (() => void) | undefined;
@@ -262,17 +262,17 @@ export const getRenderer = (
     let timeline = buildLetterTimeline(
       ctx,
       'タイピングゲーム: Mini Typing (仮称)',
-      timeAfter(timeNow(), ms(0)),
+      time.after(time.now(), time.ms(0)),
       canvas.width,
       canvas.height,
-      ms(250),
+      time.ms(250),
     );
 
     return () => {
       ctx.font = '48px IBMPlexSans, IBMPlexSansJP';
-      maintainTimeline(timeline, timeNow());
-      for (const obj of listTimelineElements(timeline, timeNow())) {
-        renderGameObject(ctx, theme, obj, timeNow());
+      maintainTimeline(timeline, time.now());
+      for (const obj of listTimelineElements(timeline, time.now())) {
+        renderGameObject(ctx, theme, obj, time.now());
       }
     };
   };
@@ -288,8 +288,8 @@ export const getRenderer = (
   };
 
   const render = () => {
-    const now = timeNow();
-    const deltaTimeMs = durationBetween(now, prevTime);
+    const now = time.now();
+    const deltaTimeMs = time.duration(now, prevTime);
     prevTime = now;
     tick += 1;
 

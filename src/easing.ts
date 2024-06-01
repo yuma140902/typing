@@ -1,4 +1,4 @@
-import { type DurationMs, type TimeMs } from './time';
+import { type Duration, type Time } from './util/time';
 
 /**
  * イージング
@@ -6,9 +6,9 @@ import { type DurationMs, type TimeMs } from './time';
 export type Easing = {
   type: EasingType;
   // イージングの開始時刻
-  start: TimeMs;
+  start: Time;
   // イージングの長さ
-  duration: DurationMs;
+  duration: Duration;
 };
 
 /**
@@ -45,7 +45,7 @@ export const easing = (
   from: number,
   to: number,
   easing: Easing,
-  now: TimeMs,
+  now: Time,
 ): number => {
   if (easing.type.tag === 'fixed') {
     return from;
@@ -77,14 +77,14 @@ export const easing = (
 
 export const animateNumber = (
   value: EasingValue<number>,
-  now: TimeMs,
+  now: Time,
 ): number => {
   return easing(value.from, value.to, value.easing, now);
 };
 
 export const animatePoint = (
   value: EasingValue<{ x: number; y: number }>,
-  now: TimeMs,
+  now: Time,
 ): { x: number; y: number } => {
   return {
     x: easing(value.from.x, value.to.x, value.easing, now),

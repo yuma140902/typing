@@ -1,12 +1,12 @@
-import { type TimeMs } from './time';
+import { type Time } from './util/time';
 
 export type Timeline<T> = {
   elements: TimelineElement<T>[];
 };
 
 export type TimelineElement<T> = {
-  appearAt: TimeMs;
-  disappearAt: TimeMs;
+  appearAt: Time;
+  disappearAt: Time;
   obj: T;
 };
 
@@ -15,7 +15,7 @@ export type TimelineElement<T> = {
  */
 export const listTimelineElements = <T>(
   timeline: Timeline<T>,
-  now: TimeMs,
+  now: Time,
 ): T[] =>
   timeline.elements
     .filter((element) => element.appearAt <= now && now < element.disappearAt)
@@ -24,7 +24,7 @@ export const listTimelineElements = <T>(
 /**
  * タイムラインから時間が過ぎた要素を削除する
  */
-export const maintainTimeline = <T>(timeline: Timeline<T>, now: TimeMs) => {
+export const maintainTimeline = <T>(timeline: Timeline<T>, now: Time) => {
   timeline.elements = timeline.elements.filter(
     (element) => element.disappearAt > now,
   );
