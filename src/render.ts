@@ -9,7 +9,7 @@ import {
   listTimelineElements,
   maintainTimeline,
 } from './timeline';
-import { type Time, type Duration } from './util/time';
+import { type Time, type Duration } from './util';
 
 const needAnimation = (state: GameState) => {
   return state.phase.tag === 'title';

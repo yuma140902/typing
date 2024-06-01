@@ -1,4 +1,4 @@
-import { type Time } from './util/time';
+import { type Time } from './util';
 
 export type Timeline<T> = {
   elements: TimelineElement<T>[];
