@@ -37,11 +37,11 @@ export const getRenderableObjects: GetRenderableObjects<
     fillColor: state.theme.background,
   });
 
-  sceneForEachAppearingObjects(scene, now, (obj) => {
+  sceneForEachAppearingObjects(scene, now, (obj, layer) => {
     if (obj.tag === 'Text') {
       rs.push({
         needsAnimation: false,
-        layer: 1,
+        layer,
         tag: 'text',
         x: obj.x,
         y: obj.y,
@@ -53,7 +53,7 @@ export const getRenderableObjects: GetRenderableObjects<
     } else if (obj.tag === 'Rectangle') {
       rs.push({
         needsAnimation: !allFixed([obj.x, obj.y, obj.width, obj.height], now),
-        layer: 1,
+        layer,
         tag: 'rectangle',
         x: animateNumber(obj.x, now),
         y: animateNumber(obj.y, now),

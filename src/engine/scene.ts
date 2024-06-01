@@ -59,11 +59,11 @@ export const sceneRemoveDisappearedObjects = <O>(
 export const sceneForEachAppearingObjects = <O>(
   scene: Scene<O>,
   now: Time,
-  callback: (object: O) => void,
+  callback: (object: O, layer: number) => void,
 ) => {
   scene.objects.forEach((object) => {
     if (object.appear <= now && object.disappear > now) {
-      callback(object.value);
+      callback(object.value, object.layer);
     }
   });
 };

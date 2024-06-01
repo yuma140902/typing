@@ -4,7 +4,7 @@ import { EasingValue } from '../util/easing';
 import { Duration, Time } from '../util/time';
 import { GameObject } from './objects';
 
-const linear = <T>(
+export const linear = <T>(
   from: T,
   to: T,
   start: Time,
@@ -24,7 +24,7 @@ const linear = <T>(
   };
 };
 
-const fixed = <T>(value: T): EasingValue<T> => {
+export const fixed = <T>(value: T): EasingValue<T> => {
   return {
     from: value,
     to: value,
@@ -45,9 +45,17 @@ export const addTitleText = (
   start: Time,
   canvasWidth: number,
   canvasHeight: number,
-) => {
+): {
+  end: Time;
+  lastCursor: {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+  };
+} => {
   /** 1文字表示するのにかける時間 */
-  const delay: Duration = time.ms(250);
+  const delay: Duration = time.ms(240);
   /** カーソルが動いている時間の割合 */
   const cursorRatio = 0.75;
   /** フォントサイズ */
@@ -56,6 +64,8 @@ export const addTitleText = (
   const cursorHeight = Math.floor(fontSize / 0.8);
   /** カーソルの幅 */
   const cursorWidth = Math.floor(cursorHeight / 15);
+  /** 最後のカーソルの表示時間 */
+  const lastCursorDuration = time.ms(240);
 
   const font = `${fontSize}px IBMPlexSans, IBMPlexSansJP`;
   ctx.font = font;
@@ -89,7 +99,7 @@ export const addTitleText = (
         cursorAppear: time.after(start, time.ms(i * delay)),
         cursorDisappear:
           i === letters.length - 1
-            ? time.after(start, time.ms(Infinity))
+            ? time.after(start, time.ms(i * delay + delay + lastCursorDuration))
             : time.after(start, time.ms(i * delay + delay)),
         cursorStart: time.after(start, time.ms(i * delay)),
         cursorDuration: time.ms(delay * cursorRatio),
@@ -135,4 +145,14 @@ export const addTitleText = (
       1,
     );
   }
+
+  return {
+    end: timings[timings.length - 1].cursorDisappear,
+    lastCursor: {
+      x: xs[letters.length],
+      y: cursorY,
+      width: cursorWidth,
+      height: cursorHeight,
+    },
+  };
 };
