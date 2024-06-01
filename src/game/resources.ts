@@ -8,3 +8,9 @@ export const resourceLoader: ResourceLoader<GameResources> = () => {
   let r = new Promise((resolve) => setTimeout(() => resolve(42), 1000));
   return Promise.all([f1.load(), f2.load(), r]);
 };
+
+export const onResourceLoaded = (resource: GameResources) => {
+  const [f1, f2, _] = resource;
+  document.fonts.add(f1);
+  document.fonts.add(f2);
+};
