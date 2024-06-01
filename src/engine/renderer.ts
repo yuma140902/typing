@@ -59,7 +59,7 @@ export const createRenderer = <S, O>(
   getRenderableObjects: GetRenderableObjects<S, O>,
 ): Renderer<S, O> => {
   let prevTime = time.now();
-  let tick = 0;
+  let frame = 0;
   const fpsCounter = createFpsCounter();
   let objects: RenderableObject[] = [];
   let needsAnimation = false;
@@ -84,7 +84,7 @@ export const createRenderer = <S, O>(
     const now = time.now();
     const deltaTime = time.duration(now, prevTime);
     prevTime = now;
-    tick += 1;
+    frame += 1;
 
     sceneRemoveDisappearedObjects(scene, now);
     objects = getRenderableObjects(state, scene, deltaTime, now, ctx);
@@ -93,9 +93,13 @@ export const createRenderer = <S, O>(
 
     fpsCounter.addSample();
     renderDebugInfo([
-      { label: 'tick', value: tick.toString() },
+      { label: 'frame', value: frame.toString() },
       { label: 'deltaTime (ms)', value: deltaTime.toFixed(2) },
       { label: 'FPS', value: fpsCounter.getFps().toFixed(2) },
+      {
+        label: 'rendering loop',
+        value: needsAnimation ? 'running' : 'suspended',
+      },
     ]);
   };
 
