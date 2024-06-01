@@ -22,7 +22,7 @@ export type GenerationalArray<T> = {
   forEach: (callback: (value: T, id: GenerationalId) => void) => void;
 };
 
-export const create = <T>(): GenerationalArray<T> => {
+export const createGenerationalArray = <T>(): GenerationalArray<T> => {
   let array: GenerationalEntry<T>[] = [];
   let emptyIndices: number[] = [];
 

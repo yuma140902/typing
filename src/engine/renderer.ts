@@ -1,7 +1,7 @@
 import { sceneRemoveDisappearedObjects, type Scene } from './scene';
-import * as time from '../util/time';
-import * as fps_counter from '../util/fps_counter';
 import { GetRenderableObjects } from './engine';
+import { time } from '../util';
+import { createFpsCounter } from '../util/fps';
 
 export type RenderableObject = {
   needsAnimation: boolean;
@@ -57,7 +57,7 @@ export const createRenderer = <S, O>(
   const ctx = canvas.getContext('2d')!;
   let prevTime = time.now();
   let tick = 0;
-  const fpsCounter = fps_counter.create();
+  const fpsCounter = createFpsCounter();
   let objects: RenderableObject[] = [];
 
   const renderDebugInfo = (info: { label: string; value: string }[]) => {

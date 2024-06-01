@@ -7,7 +7,7 @@ import {
   sceneClearObjects,
   sceneForEachAppearingObjects,
 } from '../engine';
-import * as time from '../util/time';
+import { time } from '../util';
 import { type GameObject, type Text } from './objects';
 import { resourceLoader, type GameResources } from './resources';
 import { getInitialGameState, type GameState } from './state';

@@ -1,8 +1,8 @@
 import {
   type GenerationalId,
   type GenerationalArray,
+  createGenerationalArray,
 } from '../util/generational_array';
-import * as generational_array from '../util/generational_array';
 import { type Time } from '../util/time';
 
 export type Scene<O> = {
@@ -18,7 +18,7 @@ export type SceneObject<O> = {
 
 export const createEmptyScene = <O>(): Scene<O> => {
   return {
-    objects: generational_array.create(),
+    objects: createGenerationalArray(),
   };
 };
 

@@ -7,7 +7,7 @@ export type FpsCounter = {
   getFps: () => number;
 };
 
-export const create = (): FpsCounter => {
+export const createFpsCounter = (): FpsCounter => {
   let prevSampleTime = time.now();
   let fpsSamples: number[] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
   let fpsSamplesSum = 0;
