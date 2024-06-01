@@ -10,9 +10,4 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   </div>
 `;
 
-/*const theme: Theme = {
-  foreground: '#abb2bf',
-  background: '#282c34',
-  primary: '#61afef',
-};*/
 start();

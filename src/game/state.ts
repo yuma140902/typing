@@ -2,6 +2,13 @@ export type GameState = {
   phase: GamePhase;
   width: number;
   height: number;
+  theme: Theme;
+};
+
+export type Theme = {
+  foreground: string;
+  background: string;
+  primary: string;
 };
 
 export type GamePhase = LoadingPhase | TitlePhase | PlayingPhase;
@@ -19,5 +26,10 @@ export const getInitialGameState = (): GameState => {
     phase: { tag: 'loading' },
     width: window.innerWidth,
     height: window.innerHeight,
+    theme: {
+      foreground: '#abb2bf',
+      background: '#282c34',
+      primary: '#61afef',
+    },
   };
 };
