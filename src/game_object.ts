@@ -1,11 +1,11 @@
-import { type EasingValue } from './engine';
+import { type Point, type EasingValue } from './engine';
 import { type Theme } from './theme';
 
 export type GameObject = Rectangle | TextBlock;
 
 export type Rectangle = {
   tag: 'rectangle';
-  position: EasingValue<{ x: number; y: number }>;
+  position: EasingValue<Point>;
   strokeColor?: keyof Theme;
   fillColor?: keyof Theme;
   width: EasingValue<number>;
@@ -14,7 +14,7 @@ export type Rectangle = {
 
 export type TextBlock = {
   tag: 'text-block';
-  position: EasingValue<{ x: number; y: number }>;
+  position: EasingValue<Point>;
   strokeColor?: keyof Theme;
   fillColor?: keyof Theme;
   align?: CanvasTextAlign;

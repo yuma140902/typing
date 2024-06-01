@@ -1,4 +1,5 @@
 import { type Duration, type Time } from '../util';
+import { type Point } from './point';
 
 /**
  * イージング
@@ -82,10 +83,7 @@ export const animateNumber = (
   return easing(value.from, value.to, value.easing, now);
 };
 
-export const animatePoint = (
-  value: EasingValue<{ x: number; y: number }>,
-  now: Time,
-): { x: number; y: number } => {
+export const animatePoint = (value: EasingValue<Point>, now: Time): Point => {
   return {
     x: easing(value.from.x, value.to.x, value.easing, now),
     y: easing(value.from.y, value.to.y, value.easing, now),
