@@ -7,11 +7,6 @@ import {
 import { type Rectangle, type GameObject, type TextBlock } from './game_object';
 import { type GameState } from './game_state';
 import { type Theme } from './theme';
-import {
-  type Timeline,
-  listTimelineElements,
-  maintainTimeline,
-} from './timeline';
 import * as time from './util/time';
 import { type Time, type Duration } from './util/time';
 import * as fps_counter from './util/fps_counter';

@@ -1,4 +1,4 @@
-import { type Branded } from '../util';
+import { type Branded } from '../util/branded';
 
 /**
  * 1970/01/01深夜0時からの経過時間 (ミリ秒)

@@ -1,6 +1,7 @@
 /**
  * @module 世代型配列
  * 要素の追加、削除、参照を高速に行うことができる。
+ * GenerationalIdで要素を追跡することができる．
  */
 
 export type GenerationalId = {
@@ -17,6 +18,7 @@ export type GenerationalArray<T> = {
   add: (value: T) => GenerationalId;
   get: (id: GenerationalId) => T | undefined;
   remove: (id: GenerationalId) => T | undefined;
+  clear: () => void;
   forEach: (callback: (value: T, id: GenerationalId) => void) => void;
 };
 
@@ -59,10 +61,21 @@ export const create = <T>(): GenerationalArray<T> => {
     });
   };
 
+  const clear = () => {
+    let removeList: GenerationalId[] = [];
+    forEach((_, index) => {
+      removeList.push(index);
+    });
+    removeList.forEach((id) => {
+      remove(id);
+    });
+  };
+
   return {
     add,
     get,
     remove,
+    clear,
     forEach,
   };
 };
