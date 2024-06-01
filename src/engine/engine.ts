@@ -15,7 +15,8 @@ export type MessageHandler<S, O, R> = (
   mutableScene: Scene<O>,
 ) => S | undefined;
 
-export type GetRenderableObjects<O> = (
+export type GetRenderableObjects<S, O> = (
+  state: S,
   scene: Scene<O>,
   deltaTime: Duration,
   now: Time,
@@ -27,7 +28,7 @@ export const startEngine = <S, O, R>(
   resourceLoader: ResourceLoader<R>,
   initialState: S,
   messageHandler: MessageHandler<S, O, R>,
-  getRenderableObjects: GetRenderableObjects<O>,
+  getRenderableObjects: GetRenderableObjects<S, O>,
 ) => {
   const renderer = createRenderer(canvas, getRenderableObjects);
   let state = initialState;
@@ -37,7 +38,7 @@ export const startEngine = <S, O, R>(
     let newState = messageHandler(state, message, scene);
     if (newState) {
       state = newState;
-      scheduleRendering(renderer, scene);
+      scheduleRendering(renderer, state, scene);
     }
   };
 

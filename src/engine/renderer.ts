@@ -1,7 +1,7 @@
 import { sceneRemoveDisappearedObjects, type Scene } from './scene';
 import * as time from '../util/time';
 import * as fps_counter from '../util/fps_counter';
-import { type Duration, type Time } from '../util/time';
+import { GetRenderableObjects } from './engine';
 
 export type RenderableObject = {
   needsAnimation: boolean;
@@ -27,8 +27,8 @@ export type Text = {
   fillColor: string;
 };
 
-export type Renderer<O> = {
-  renderScene: (scene: Scene<O>) => void;
+export type Renderer<S, O> = {
+  renderScene: (state: S, scene: Scene<O>) => void;
   needsAnimation: () => boolean;
 };
 
@@ -50,15 +50,10 @@ const renderObjects = (
   }
 };
 
-export const createRenderer = <O>(
+export const createRenderer = <S, O>(
   canvas: HTMLCanvasElement,
-  getRenderableObjects: (
-    scene: Scene<O>,
-    deltaTime: Duration,
-    now: Time,
-    ctx: CanvasRenderingContext2D,
-  ) => RenderableObject[],
-): Renderer<O> => {
+  getRenderableObjects: GetRenderableObjects<S, O>,
+): Renderer<S, O> => {
   const ctx = canvas.getContext('2d')!;
   let prevTime = time.now();
   let tick = 0;
@@ -81,14 +76,14 @@ export const createRenderer = <O>(
 
   const needsAnimation = () => objects.some((obj) => obj.needsAnimation);
 
-  const renderScene = (scene: Scene<O>) => {
+  const renderScene = (state: S, scene: Scene<O>) => {
     const now = time.now();
     const deltaTime = time.duration(now, prevTime);
     prevTime = now;
     tick += 1;
 
     sceneRemoveDisappearedObjects(scene, now);
-    objects = getRenderableObjects(scene, deltaTime, now, ctx);
+    objects = getRenderableObjects(state, scene, deltaTime, now, ctx);
     renderObjects(ctx, objects);
 
     fpsCounter.addSample();
@@ -102,14 +97,15 @@ export const createRenderer = <O>(
   return { renderScene, needsAnimation };
 };
 
-export const scheduleRendering = <O>(
-  renderer: Renderer<O>,
+export const scheduleRendering = <S, O>(
+  renderer: Renderer<S, O>,
+  state: S,
   scene: Scene<O>,
 ) => {
   window.requestAnimationFrame(() => {
-    renderer.renderScene(scene);
+    renderer.renderScene(state, scene);
     if (renderer.needsAnimation()) {
-      scheduleRendering(renderer, scene);
+      scheduleRendering(renderer, state, scene);
     }
   });
 };

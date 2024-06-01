@@ -78,13 +78,26 @@ export const start = () => {
     }
   };
 
-  const getRenderableObjects: GetRenderableObjects<GameObject> = (
+  const getRenderableObjects: GetRenderableObjects<GameState, GameObject> = (
+    state,
     scene,
     _deltaTime,
     now,
     _ctx,
   ) => {
     let rs: RenderableObject[] = [];
+
+    rs.push({
+      needsAnimation: false,
+      layer: 0,
+      tag: 'rectangle',
+      x: 0,
+      y: 0,
+      width: state.width,
+      height: state.height,
+      fillColor: state.theme.background,
+    });
+
     sceneForEachAppearingObjects(scene, now, (obj) => {
       if (obj.tag === 'Text') {
         rs.push({
@@ -96,7 +109,7 @@ export const start = () => {
           align: 'start',
           text: obj.text,
           font: '48px IBMPlexSans, IBMPlexSansJP',
-          fillColor: 'black',
+          fillColor: state.theme.foreground,
         });
       }
     });
