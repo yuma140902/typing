@@ -1,6 +1,10 @@
-import { ReaderIO } from 'fp-ts/lib/ReaderIO';
+import { flow, pipe } from 'fp-ts/function';
+import * as IO from 'fp-ts/IO';
+import * as RIO from 'fp-ts/ReaderIO';
 
-export type Render<A> = ReaderIO<CanvasRenderingContext2D, A>;
+export type Html<A> = RIO.ReaderIO<HTMLCanvasElement, A>;
+
+export type Render<A> = RIO.ReaderIO<CanvasRenderingContext2D, A>;
 
 export const getFillStyle: Render<string | CanvasGradient | CanvasPattern> =
   (ctx) => () =>
@@ -57,3 +61,15 @@ export const fillText: (text: {
 export const measureText: (text: string) => Render<TextMetrics> =
   (text) => (ctx) => () =>
     ctx.measureText(text);
+
+export const getCanvasElement: (query: string) => IO.IO<HTMLCanvasElement> =
+  (query) => () =>
+    document.querySelector<HTMLCanvasElement>(query)!;
+
+export const getContext2D: Html<CanvasRenderingContext2D> = (canvas) =>
+  IO.of(canvas.getContext('2d')!);
+
+export const render =
+  (query: string) =>
+  <A>(r: Render<A>): IO.IO<void> =>
+    pipe(getCanvasElement(query), IO.chain(flow(getContext2D, IO.chain(r))));
