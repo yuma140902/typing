@@ -1,4 +1,4 @@
-import { type Duration, type Time } from '../util';
+import { type Duration, type Time } from '../util/time';
 import { type Point } from './point';
 
 /**

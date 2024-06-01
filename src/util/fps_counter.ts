@@ -1,6 +1,6 @@
 // 移動平均を使ってFPSを計算する
 
-import { time } from '../util';
+import * as time from '../util/time';
 
 export type FpsCounter = {
   addSample: () => void;
