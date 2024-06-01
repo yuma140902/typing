@@ -67,3 +67,19 @@ export const sceneForEachAppearingObjects = <O>(
     }
   });
 };
+
+/**
+ * すべてのオブジェクトが登場済みで，登場済みのすべてのオブジェクトが永遠に存在し続けるならtrueを返す．
+ * 未登場のオブジェクトがある場合や，登場済みオブジェクトが消える予定である場合はfalseを返す．
+ * */
+export const sceneIsFixed = <O>(scene: Scene<O>, now: Time): boolean => {
+  let every = true;
+  scene.objects.forEach((object) => {
+    if (object.appear >= now) {
+      every = false;
+    } else if (isFinite(object.disappear)) {
+      every = false;
+    }
+  });
+  return every;
+};

@@ -1,4 +1,8 @@
-import { sceneRemoveDisappearedObjects, type Scene } from './scene';
+import {
+  sceneIsFixed,
+  sceneRemoveDisappearedObjects,
+  type Scene,
+} from './scene';
 import { GetRenderableObjects } from './engine';
 import { time } from '../util';
 import { createFpsCounter } from '../util/fps';
@@ -51,14 +55,14 @@ const renderObjects = (
 };
 
 export const createRenderer = <S, O>(
-  canvas: HTMLCanvasElement,
+  ctx: CanvasRenderingContext2D,
   getRenderableObjects: GetRenderableObjects<S, O>,
 ): Renderer<S, O> => {
-  const ctx = canvas.getContext('2d')!;
   let prevTime = time.now();
   let tick = 0;
   const fpsCounter = createFpsCounter();
   let objects: RenderableObject[] = [];
+  let needsAnimation = false;
 
   const renderDebugInfo = (info: { label: string; value: string }[]) => {
     const font = ctx.font;
@@ -68,13 +72,13 @@ export const createRenderer = <S, O>(
     info.forEach(({ label, value }, i) => {
       const text = `${label}: ${value}`;
       const width = ctx.measureText(text).width;
-      ctx.fillText(text, canvas.width - width - 8, 12 * (i + 1));
+      ctx.fillText(text, ctx.canvas.width - width - 8, 12 * (i + 1));
     });
     ctx.font = font;
     ctx.fillStyle = fillStyle;
   };
 
-  const needsAnimation = () => objects.some((obj) => obj.needsAnimation);
+  const checkNeedAnimation = () => objects.some((obj) => obj.needsAnimation);
 
   const renderScene = (state: S, scene: Scene<O>) => {
     const now = time.now();
@@ -85,6 +89,7 @@ export const createRenderer = <S, O>(
     sceneRemoveDisappearedObjects(scene, now);
     objects = getRenderableObjects(state, scene, deltaTime, now, ctx);
     renderObjects(ctx, objects);
+    needsAnimation = checkNeedAnimation() || !sceneIsFixed(scene, now);
 
     fpsCounter.addSample();
     renderDebugInfo([
@@ -94,7 +99,10 @@ export const createRenderer = <S, O>(
     ]);
   };
 
-  return { renderScene, needsAnimation };
+  return {
+    renderScene,
+    needsAnimation: () => needsAnimation,
+  };
 };
 
 export const scheduleRendering = <S, O>(

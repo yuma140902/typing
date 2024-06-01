@@ -8,12 +8,15 @@ import {
   sceneForEachAppearingObjects,
 } from '../engine';
 import { time } from '../util';
-import { type GameObject, type Text } from './objects';
+import { EasingValue, animateNumber } from '../util/easing';
+import { Time } from '../util/time';
+import { addTitleText, type GameObject, type Text } from './objects';
 import { resourceLoader, type GameResources } from './resources';
 import { getInitialGameState, type GameState } from './state';
 
 export const start = () => {
   const canvas = document.querySelector<HTMLCanvasElement>('#canvas')!;
+  const ctx = canvas.getContext('2d')!;
 
   const messageHandler: MessageHandler<GameState, GameObject, GameResources> = (
     state,
@@ -24,7 +27,10 @@ export const start = () => {
       const text: Text = {
         tag: 'Text',
         text: 'Loading...',
-        position: { x: 10, y: 10 },
+        fill: 'foreground',
+        font: '24px IBMPlexSans, IBMPlexSansJP, monospace',
+        x: 100,
+        y: 100,
       };
       sceneAddObject(
         mutableScene,
@@ -43,18 +49,15 @@ export const start = () => {
 
       sceneClearObjects(mutableScene);
 
-      const text: Text = {
-        tag: 'Text',
-        text: 'タイピングゲーム: Mini Typing (仮称)',
-        position: { x: 10, y: 10 },
-      };
-      sceneAddObject(
+      addTitleText(
         mutableScene,
-        text,
+        ctx,
+        'タイピングゲーム: Mini Typing (仮称)',
         time.now(),
-        time.after(time.now(), time.ms(Infinity)),
-        1,
+        state.width,
+        state.height,
       );
+
       return {
         ...state,
         phase: { tag: 'title' },
@@ -76,6 +79,17 @@ export const start = () => {
         }
       }
     }
+  };
+
+  const allFixed = <T>(values: EasingValue<T>[], now: Time): boolean => {
+    return values.every((v) => {
+      if (v.easing.type.tag === 'fixed') {
+        return true;
+      } else if (time.after(v.easing.start, v.easing.duration) < now) {
+        return true;
+      }
+      return false;
+    });
   };
 
   const getRenderableObjects: GetRenderableObjects<GameState, GameObject> = (
@@ -104,12 +118,23 @@ export const start = () => {
           needsAnimation: false,
           layer: 1,
           tag: 'text',
-          x: obj.position.x,
-          y: obj.position.y,
+          x: obj.x,
+          y: obj.y,
           align: 'start',
           text: obj.text,
-          font: '48px IBMPlexSans, IBMPlexSansJP',
-          fillColor: state.theme.foreground,
+          font: obj.font,
+          fillColor: state.theme[obj.fill],
+        });
+      } else if (obj.tag === 'Rectangle') {
+        rs.push({
+          needsAnimation: !allFixed([obj.x, obj.y, obj.width, obj.height], now),
+          layer: 1,
+          tag: 'rectangle',
+          x: animateNumber(obj.x, now),
+          y: animateNumber(obj.y, now),
+          width: animateNumber(obj.width, now),
+          height: animateNumber(obj.height, now),
+          fillColor: state.theme[obj.fill],
         });
       }
     });
@@ -117,7 +142,7 @@ export const start = () => {
   };
 
   startEngine(
-    canvas,
+    ctx,
     resourceLoader,
     getInitialGameState(),
     messageHandler,

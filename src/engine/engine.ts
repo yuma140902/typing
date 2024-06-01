@@ -24,13 +24,13 @@ export type GetRenderableObjects<S, O> = (
 ) => RenderableObject[];
 
 export const startEngine = <S, O, R>(
-  canvas: HTMLCanvasElement,
+  ctx: CanvasRenderingContext2D,
   resourceLoader: ResourceLoader<R>,
   initialState: S,
   messageHandler: MessageHandler<S, O, R>,
   getRenderableObjects: GetRenderableObjects<S, O>,
 ) => {
-  const renderer = createRenderer(canvas, getRenderableObjects);
+  const renderer = createRenderer(ctx, getRenderableObjects);
   let state = initialState;
   let scene = createEmptyScene<O>();
 
@@ -45,8 +45,8 @@ export const startEngine = <S, O, R>(
   sendMessage({ tag: 'GameInitialized' });
   sendMessage({
     tag: 'WindowResized',
-    width: canvas.width,
-    height: canvas.height,
+    width: ctx.canvas.width,
+    height: ctx.canvas.height,
   });
 
   resourceLoader().then((resource) => {
@@ -54,12 +54,12 @@ export const startEngine = <S, O, R>(
   });
 
   window.addEventListener('resize', () => {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    ctx.canvas.width = window.innerWidth;
+    ctx.canvas.height = window.innerHeight;
     sendMessage({
       tag: 'WindowResized',
-      width: canvas.width,
-      height: canvas.height,
+      width: ctx.canvas.width,
+      height: ctx.canvas.height,
     });
   });
 
