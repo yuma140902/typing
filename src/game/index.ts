@@ -10,8 +10,9 @@ import {
 import { time } from '../util';
 import { EasingValue, animateNumber } from '../util/easing';
 import { Time } from '../util/time';
-import { addTitleText, type GameObject, type Text } from './objects';
+import { type GameObject, type Text } from './objects';
 import { resourceLoader, type GameResources } from './resources';
+import { addTitleText } from './scene';
 import { getInitialGameState, type GameState } from './state';
 
 export const start = () => {
