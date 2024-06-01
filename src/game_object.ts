@@ -1,4 +1,4 @@
-import { type EasingValue } from './easing';
+import { type EasingValue } from './engine';
 import { type Theme } from './theme';
 
 export type GameObject = Rectangle | TextBlock;

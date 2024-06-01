@@ -1,4 +1,4 @@
-import { type Duration, type Time } from './util/time';
+import { type Duration, type Time } from '../util/time';
 
 /**
  * イージング

@@ -1,10 +1,5 @@
 import { fps_counter } from './util';
-import {
-  type Easing,
-  animatePoint,
-  EasingValue,
-  animateNumber,
-} from './easing';
+import { easing, type Easing, type EasingValue } from './engine';
 import { type Rectangle, type GameObject, type TextBlock } from './game_object';
 import { type GameState } from './game_state';
 import { type Theme } from './theme';
@@ -196,9 +191,9 @@ const renderRectangle = (
   rect: Rectangle,
   now: Time,
 ) => {
-  const { x, y } = animatePoint(rect.position, now);
-  const width = animateNumber(rect.width, now);
-  const height = animateNumber(rect.height, now);
+  const { x, y } = easing.animatePoint(rect.position, now);
+  const width = easing.animateNumber(rect.width, now);
+  const height = easing.animateNumber(rect.height, now);
   ctx.fillRect(x, y, width, height);
 };
 
@@ -215,7 +210,7 @@ const renderTextBlock = (
   } else {
     ctx.textAlign = 'start';
   }
-  const { x, y } = animatePoint(textBlock.position, now);
+  const { x, y } = easing.animatePoint(textBlock.position, now);
   ctx.fillText(textBlock.text, x, y);
 };
 
