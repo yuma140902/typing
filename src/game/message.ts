@@ -1,4 +1,4 @@
-import { MessageHandler } from '../engine';
+import { MessageHandler, dispatchCustomMessage } from '../engine';
 import { time } from '../util';
 import { GameObject } from './objects';
 import { GameResources, onResourceLoaded } from './resources';
@@ -7,14 +7,17 @@ import { enterPlayingScreen } from './screen/playing';
 import { enterTitleScreen } from './screen/title';
 import { GameState } from './state';
 
+export type GameCustomMessage = 'a';
+
 export const getMessageHandler = (
   ctx: CanvasRenderingContext2D,
-): MessageHandler<GameState, GameObject, GameResources> => {
-  const messageHandler: MessageHandler<GameState, GameObject, GameResources> = (
-    state,
-    message,
-    mutableScene,
-  ) => {
+): MessageHandler<GameState, GameObject, GameResources, GameCustomMessage> => {
+  const messageHandler: MessageHandler<
+    GameState,
+    GameObject,
+    GameResources,
+    GameCustomMessage
+  > = (state, message, mutableScene) => {
     if (message.tag === 'GameInitialized') {
       enterLoadingScreen(ctx, mutableScene, time.now());
       return {
@@ -23,6 +26,9 @@ export const getMessageHandler = (
     } else if (message.tag === 'ResourceLoaded') {
       onResourceLoaded(message.resource);
       enterTitleScreen(ctx, mutableScene, time.now());
+      window.setTimeout(() => {
+        dispatchCustomMessage('a');
+      }, 1000);
       return {
         ...state,
         phase: { tag: 'title' },
@@ -43,6 +49,7 @@ export const getMessageHandler = (
           };
         }
       }
+    } else if (message.tag === 'Custom') {
     }
   };
 

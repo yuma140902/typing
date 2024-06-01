@@ -1,8 +1,9 @@
-export type Message<R> =
+export type Message<R, M> =
   | GameInitializedMessage
   | WindowResizedMessage
   | ResourceLoadedMessage<R>
-  | KeyEventMessage;
+  | KeyEventMessage
+  | CustomMessage<M>;
 
 export type GameInitializedMessage = {
   tag: 'GameInitialized';
@@ -18,7 +19,20 @@ export type ResourceLoadedMessage<R> = {
   tag: 'ResourceLoaded';
   resource: R;
 };
+
 export type KeyEventMessage = {
   tag: 'KeyEvent';
   event: KeyboardEvent;
+};
+
+export type CustomMessage<M> = {
+  tag: 'Custom';
+  value: M;
+};
+
+export const customEventName = 'customMessage';
+
+export const dispatchCustomMessage = <M>(value: M) => {
+  const event = new CustomEvent(customEventName, { detail: value });
+  window.dispatchEvent(event);
 };
