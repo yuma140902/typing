@@ -1,4 +1,4 @@
-import { getFpsCounter } from './debug_fps';
+import { fps_counter } from './util';
 import {
   type Easing,
   animatePoint,
@@ -230,7 +230,7 @@ export const getRenderer = (
 ) => {
   const ctx = canvas.getContext('2d')!;
   //const initialTime = timeNow();
-  const fpsCounter = getFpsCounter();
+  const fpsCounter = fps_counter.create();
   let prevTime = time.now();
   let tick = 0;
   let renderLoadingScreen: (() => void) | undefined;

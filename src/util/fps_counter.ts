@@ -1,13 +1,13 @@
 // 移動平均を使ってFPSを計算する
 
-import { time } from './util';
+import { time } from '../util';
 
 export type FpsCounter = {
   addSample: () => void;
   getFps: () => number;
 };
 
-export const getFpsCounter = (): FpsCounter => {
+export const create = (): FpsCounter => {
   let prevSampleTime = time.now();
   let fpsSamples: number[] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
   let fpsSamplesSum = 0;

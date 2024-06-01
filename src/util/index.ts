@@ -3,3 +3,4 @@
 export type Branded<T, U extends string> = T & { [key in U]: never };
 
 export * as time from './time';
+export * as fps_counter from './fps_counter';
