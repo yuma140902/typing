@@ -101,7 +101,7 @@ export const getMessageHandler = (
     if (message.tag === 'KeyEvent' && message.event.altKey) {
       if (message.event.key.toLowerCase() === 't') {
         const { theme, themeId } = debugNextTheme(state.debugThemeId);
-        document.body.style.backgroundColor = state.theme.background;
+        document.body.style.backgroundColor = theme.background;
         return {
           ...state,
           theme,
