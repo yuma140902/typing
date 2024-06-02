@@ -44,7 +44,13 @@ export const getMessageHandler = (
             correctText: 'apple banana cherry',
             typingText: '',
           };
-          enterPlayingScreen(ctx, mutableScene, time.now(), phase);
+          enterPlayingScreen(
+            ctx,
+            mutableScene,
+            time.now(),
+            state.phase.cursorId,
+            phase,
+          );
           return {
             ...state,
             phase,
