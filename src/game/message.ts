@@ -58,17 +58,37 @@ export const getMessageHandler = (
           };
         }
       } else if (state.phase.tag === 'playing') {
-        const phase = onType(
-          ctx,
-          mutableScene,
-          time.now(),
-          state.phase,
-          message.event,
-        );
-        return {
-          ...state,
-          phase,
-        };
+        if (message.event.key === 'Enter') {
+          const phase: PlayingPhase = {
+            tag: 'playing',
+            correctText: 'apple banana cherry',
+            typingText: '',
+          };
+          const cursorId = enterPlayingScreen(
+            ctx,
+            mutableScene,
+            time.now(),
+            state.phase.cursorId,
+            phase,
+          );
+          phase.cursorId = cursorId;
+          return {
+            ...state,
+            phase,
+          };
+        } else {
+          const phase = onType(
+            ctx,
+            mutableScene,
+            time.now(),
+            state.phase,
+            message.event,
+          );
+          return {
+            ...state,
+            phase,
+          };
+        }
       }
     } else if (message.tag === 'Custom') {
     }
