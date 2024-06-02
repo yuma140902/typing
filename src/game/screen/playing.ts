@@ -28,7 +28,7 @@ export const enterPlayingScreen = (
   now: Time,
   cursorId: GenerationalId | undefined,
   state: PlayingPhase,
-) => {
+): GenerationalId => {
   const lastCursorScene = cursorId
     ? sceneGetObject(mutableScene, cursorId)
     : undefined;
@@ -74,7 +74,7 @@ export const enterPlayingScreen = (
       ? easeOut(lastCursor.height.to, cursorHeight, now, cursorDuration)
       : fixed(cursorHeight),
   };
-  sceneAddObject(
+  return sceneAddObject(
     mutableScene,
     cursor,
     now,
@@ -146,13 +146,14 @@ export const onType = (
     width: fixed(cursorWidth),
     height: fixed(cursorHeight),
   };
-  sceneAddObject(
+  const cursorId = sceneAddObject(
     mutableScene,
     cursor,
     now,
     time.after(now, time.ms(Infinity)),
     cursorLayer,
   );
+  state.cursorId = cursorId;
 
   return state;
 };

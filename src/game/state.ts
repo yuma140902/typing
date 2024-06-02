@@ -25,6 +25,7 @@ export type PlayingPhase = {
   tag: 'playing';
   correctText: string;
   typingText: string;
+  cursorId?: GenerationalId;
 };
 
 /**
