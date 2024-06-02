@@ -7,7 +7,7 @@ import { enterPlayingScreen, onType } from './screen/playing';
 import { enterTitleScreen } from './screen/title';
 import { GameState, PlayingPhase } from './state';
 
-export type GameCustomMessage = 'a';
+export type GameCustomMessage = never;
 
 export const getMessageHandler = (
   ctx: CanvasRenderingContext2D,
