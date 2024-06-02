@@ -64,6 +64,7 @@ export const startEngine = <S, O, R, M>(
   });
 
   window.addEventListener('keydown', (event) => {
+    event.preventDefault();
     sendMessage({ tag: 'KeyEvent', event });
   });
 
