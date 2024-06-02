@@ -8,7 +8,7 @@ import { time } from '../../util';
 import { GenerationalId } from '../../util/generational_array';
 import { Duration, Time } from '../../util/time';
 import { GameObject, Rectangle } from '../objects';
-import { easeIn, easeOut, fixed, linear } from '../scene';
+import { easeOut, fixed, linear } from '../scene';
 
 const addTitleText = (
   scene: Scene<GameObject>,

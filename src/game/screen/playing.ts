@@ -104,7 +104,7 @@ export const getRandomText = (): string => {
   const text = texts[Math.floor(Math.random() * texts.length)];
   return text
     .replace('$$$$', words[Math.floor(Math.random() * words.length)])
-    .replace('####', Math.floor(Math.random() * 100));
+    .replace('####', Math.floor(Math.random() * 100).toString());
 };
 
 export const enterPlayingScreen = (
