@@ -31,24 +31,24 @@ const retryLayer = 3;
 export const getRandomText = (): string => {
   const texts = [
     'Hello, World!',
-    'print("Hello, World!")',
-    'System.out.println("Hello, World!");',
-    'console.log("Hello, World!");',
-    'puts "Hello, World!"',
-    'echo "Hello, World!";',
-    'fmt.Println("Hello, World!")',
-    'println!("Hello, World!");',
+    'print("$$$$")',
+    'System.out.println("$$$$");',
+    'console.log("$$$$");',
+    'puts "$$$$"',
+    'echo "$$$$";',
+    'fmt.Println("$$$$")',
+    'println!("$$$$");',
     '#define ptr_ok(x) ((x) > PAGE_OFFSET && (x) < PAGE_OFFSET + MAXMEM)',
-    '#define BITBIT_SIZE(nr)	(BITBIT_NR(nr) * sizeof(long))',
+    '#define BITBIT_SIZE(nr) (BITBIT_NR(nr) * sizeof(long))',
     '#define __const_min(x, y) ((x) < (y) ? (x) : (y))',
     'extern void fpu_idle_fpregs(void);',
     'globals().update(http.HTTPStatus.__members__)',
     'git diff -a --stat',
     'git push --force-with-lease',
     'git checkout master',
-    'git switch -c feature-pr9821',
-    'git branch -d tuple-branch',
-    'git rebase -i HEAD~3',
+    'git switch -c feature/$$$$',
+    'git branch -d feature/$$$$',
+    'git rebase -i HEAD~####',
     'git commit --amend --no-edit',
     'git log --oneline --graph --all',
     'ls -R .',
@@ -57,10 +57,12 @@ export const getRandomText = (): string => {
     'cargo run --release',
     'docker build -t myimage .',
     'docker compose up -d',
+    'const answer = f(####)',
     'const result = originalCompile.apply(this, arguments)',
     'fs.rmSync(tmpdir, { recursive: true, force: true })',
-    'const el2 = createScriptElement()',
-    'Promise.resolve(42).then(console.log)',
+    'const el#### = createScriptElement()',
+    'const elem = document.querySelector(".$$$$")',
+    'Promise.resolve(####).then(console.log)',
     'All human beings are born free and equal in dignity and rights.',
     'Everyone has the right to life, liberty and security of person.',
     'No one may be compelled to belong to an association.',
@@ -78,7 +80,31 @@ export const getRandomText = (): string => {
     'The first duty of love is to listen.',
     'Man errs as long as he strives.',
   ];
-  return texts[Math.floor(Math.random() * texts.length)];
+  const words = [
+    'apple',
+    'banana',
+    'cherry',
+    'date',
+    'elderberry',
+    'fig',
+    'grape',
+    'honeydew',
+    'kiwi',
+    'lemon',
+    'mango',
+    'nectarine',
+    'orange',
+    'papaya',
+    'quince',
+    'raspberry',
+    'strawberry',
+    'tangerine',
+    'watermelon',
+  ];
+  const text = texts[Math.floor(Math.random() * texts.length)];
+  return text
+    .replace('$$$$', words[Math.floor(Math.random() * words.length)])
+    .replace('####', Math.floor(Math.random() * 100));
 };
 
 export const enterPlayingScreen = (
