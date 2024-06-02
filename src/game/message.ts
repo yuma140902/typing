@@ -1,4 +1,4 @@
-import { MessageHandler, dispatchCustomMessage } from '../engine';
+import { MessageHandler } from '../engine';
 import { time } from '../util';
 import { GameObject } from './objects';
 import { GameResources, onResourceLoaded } from './resources';

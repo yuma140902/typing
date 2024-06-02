@@ -26,6 +26,8 @@ export type PlayingPhase = {
   correctText: string;
   typingText: string;
   cursorId?: GenerationalId;
+  start?: Time;
+  end?: Time;
 };
 
 /**

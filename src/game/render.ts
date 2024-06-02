@@ -5,7 +5,7 @@ import {
 } from '../engine';
 import { time } from '../util';
 import { EasingValue, animateNumber } from '../util/easing';
-import { Time } from '../util/time';
+import { Duration, Time } from '../util/time';
 import { GameObject } from './objects';
 import { GameState } from './state';
 
@@ -18,6 +18,15 @@ const allFixed = <T>(values: EasingValue<T>[], now: Time): boolean => {
     }
     return false;
   });
+};
+
+const formatDuration = (duration: Duration): string => {
+  const ms = duration % 1000;
+  const s = Math.floor(duration / 1000) % 60;
+  const m = Math.floor(duration / 60000);
+  return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}:${ms
+    .toString()
+    .padStart(2, '0')}`;
 };
 
 export const getRenderableObjects: GetRenderableObjects<
@@ -59,6 +68,18 @@ export const getRenderableObjects: GetRenderableObjects<
         y: animateNumber(obj.y, now),
         width: animateNumber(obj.width, now),
         height: animateNumber(obj.height, now),
+        fillColor: state.theme[obj.fill],
+      });
+    } else if (obj.tag === 'Timer') {
+      rs.push({
+        needsAnimation: !obj.end,
+        layer,
+        tag: 'text',
+        x: obj.x,
+        y: obj.y,
+        align: 'start',
+        text: formatDuration(time.duration(obj.end ?? now, obj.since)),
+        font: obj.font,
         fillColor: state.theme[obj.fill],
       });
     }
