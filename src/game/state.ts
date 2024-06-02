@@ -12,6 +12,7 @@ export type Theme = {
   foreground: string;
   background: string;
   primary: string;
+  error: string;
   dimmed: string;
 };
 
@@ -28,6 +29,7 @@ export type PlayingPhase = {
   cursorId?: GenerationalId;
   start?: Time;
   end?: Time;
+  wrongText: string;
 };
 
 /**
@@ -42,6 +44,7 @@ export const getInitialGameState = (): GameState => {
       foreground: '#abb2bf',
       background: '#282c34',
       primary: '#61afef',
+      error: '#e06c75',
       dimmed: '#5c6370',
     },
   };

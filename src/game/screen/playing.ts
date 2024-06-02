@@ -169,6 +169,38 @@ export const onType = (
     return state;
   }
 
+  ctx.font = font;
+  const prevTextWidth = ctx.measureText(
+    state.typingText + state.wrongText,
+  ).width;
+  if (event.code === 'Backspace') {
+    if (state.wrongText.length !== 0) {
+      state.wrongText = state.wrongText.slice(0, -1);
+    } else {
+      state.typingText = state.typingText.slice(0, -1);
+    }
+  }
+  if (event.key.length === 1) {
+    if (
+      state.wrongText.length === 0 &&
+      state.correctText.startsWith(state.typingText + event.key)
+    ) {
+      state = {
+        ...state,
+        typingText: state.typingText + event.key,
+      };
+    } else {
+      state = {
+        ...state,
+        wrongText: state.wrongText + event.key,
+      };
+    }
+  }
+  const currentTextWidth = ctx.measureText(
+    state.typingText + state.wrongText,
+  ).width;
+  const currentTypingTextWidth = ctx.measureText(state.typingText).width;
+
   sceneClearObjects(mutableScene);
 
   const correctText: GameObject = {
@@ -206,15 +238,6 @@ export const onType = (
     correctTextLayer,
   );
 
-  const prevTypingTextWidth = ctx.measureText(state.typingText).width;
-  if (state.correctText.startsWith(state.typingText + event.key)) {
-    state = {
-      ...state,
-      typingText: state.typingText + event.key,
-    };
-  }
-  const currentTypingTextWidth = ctx.measureText(state.typingText).width;
-
   const typingText: GameObject = {
     tag: 'Text',
     text: state.typingText,
@@ -231,12 +254,28 @@ export const onType = (
     typingTextLayer,
   );
 
+  const wrongText: GameObject = {
+    tag: 'Text',
+    text: state.wrongText,
+    font,
+    fill: 'error',
+    x: textX + currentTypingTextWidth,
+    y: textY,
+  };
+  sceneAddObject(
+    mutableScene,
+    wrongText,
+    now,
+    time.after(now, time.ms(Infinity)),
+    typingTextLayer,
+  );
+
   const cursor: GameObject = {
     tag: 'Rectangle',
     fill: 'primary',
     x: linear(
-      cursorX + prevTypingTextWidth,
-      cursorX + currentTypingTextWidth,
+      cursorX + prevTextWidth,
+      cursorX + currentTextWidth,
       now,
       time.ms(100),
     ),
@@ -266,6 +305,7 @@ export const onFinished = (
   now: Time,
   state: PlayingPhase,
 ): PlayingPhase => {
+  ctx.font = font;
   let lastCursor = sceneGetObject(mutableScene, state.cursorId!)!
     .value as Rectangle;
 

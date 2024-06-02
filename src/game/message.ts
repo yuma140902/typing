@@ -43,6 +43,7 @@ export const getMessageHandler = (
             tag: 'playing',
             correctText: getRandomText(),
             typingText: '',
+            wrongText: '',
           };
           const cursorId = enterPlayingScreen(
             ctx,
@@ -63,6 +64,7 @@ export const getMessageHandler = (
             tag: 'playing',
             correctText: getRandomText(),
             typingText: '',
+            wrongText: '',
           };
           const cursorId = enterPlayingScreen(
             ctx,
