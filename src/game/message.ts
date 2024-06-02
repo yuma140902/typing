@@ -1,4 +1,5 @@
 import { MessageHandler } from '../engine';
+import { debugNextTheme } from '../theme';
 import { time } from '../util';
 import { GameObject } from './objects';
 import { GameResources, onResourceLoaded } from './resources';
@@ -38,7 +39,7 @@ export const getMessageHandler = (
         width: message.width,
         height: message.height,
       };
-    } else if (message.tag === 'KeyEvent') {
+    } else if (message.tag === 'KeyEvent' && !message.event.altKey) {
       if (state.phase.tag === 'title') {
         if (message.event.key === ' ') {
           const phase: PlayingPhase = {
@@ -95,6 +96,17 @@ export const getMessageHandler = (
         }
       }
     } else if (message.tag === 'Custom') {
+    }
+
+    if (message.tag === 'KeyEvent' && message.event.altKey) {
+      if (message.event.key.toLowerCase() === 't') {
+        const { theme, themeId } = debugNextTheme(state.debugThemeId);
+        return {
+          ...state,
+          theme,
+          debugThemeId: themeId,
+        };
+      }
     }
   };
 

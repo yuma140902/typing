@@ -38,7 +38,7 @@ export const startEngine = <S, O, R, M>(
     let newState = messageHandler(state, message, scene);
     if (newState) {
       state = newState;
-      scheduleRendering(renderer, state, scene);
+      scheduleRendering(renderer, () => state, scene);
     }
   };
 

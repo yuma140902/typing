@@ -1,4 +1,4 @@
-import { Theme } from '../theme';
+import { Theme, themeOnedark } from '../theme';
 import { GenerationalId } from '../util/generational_array';
 import { Time } from '../util/time';
 
@@ -7,6 +7,8 @@ export type GameState = {
   width: number;
   height: number;
   theme: Theme;
+  // TODO: テーマ切り替え機能を用意する
+  debugThemeId: number;
 };
 
 export type GamePhase = LoadingPhase | TitlePhase | PlayingPhase;
@@ -28,11 +30,12 @@ export type PlayingPhase = {
 /**
  *ゲームの初期状態を返す
  */
-export const getInitialGameState = (theme: Theme): GameState => {
+export const getInitialGameState = (): GameState => {
   return {
     phase: { tag: 'loading' },
     width: window.innerWidth,
     height: window.innerHeight,
-    theme,
+    theme: themeOnedark,
+    debugThemeId: 0,
   };
 };

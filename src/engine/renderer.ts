@@ -100,6 +100,10 @@ export const createRenderer = <S, O>(
         label: 'rendering loop',
         value: needsAnimation ? 'running' : 'suspended',
       },
+      {
+        label: 'theme',
+        value: 'Alt+Tでテーマ切り替え',
+      },
     ]);
   };
 
@@ -113,7 +117,7 @@ let animationLoop = false;
 
 export const scheduleRendering = <S, O>(
   renderer: Renderer<S, O>,
-  state: S,
+  getState: () => S,
   scene: Scene<O>,
   reason: 'animation' | 'message' = 'message',
 ) => {
@@ -121,10 +125,10 @@ export const scheduleRendering = <S, O>(
     return;
   }
   window.requestAnimationFrame(() => {
-    renderer.renderScene(state, scene);
+    renderer.renderScene(getState(), scene);
     if (renderer.needsAnimation()) {
       animationLoop = true;
-      scheduleRendering(renderer, state, scene, 'animation');
+      scheduleRendering(renderer, getState, scene, 'animation');
     } else {
       animationLoop = false;
     }
