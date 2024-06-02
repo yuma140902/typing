@@ -1,3 +1,4 @@
+import { GenerationalId } from '../util/generational_array';
 import { Time } from '../util/time';
 
 export type GameState = {
@@ -18,6 +19,7 @@ export type GamePhase = LoadingPhase | TitlePhase | PlayingPhase;
 export type LoadingPhase = { tag: 'loading' };
 export type TitlePhase = {
   tag: 'title';
+  cursorId?: GenerationalId;
 };
 export type PlayingPhase = {
   tag: 'playing';

@@ -25,13 +25,10 @@ export const getMessageHandler = (
       };
     } else if (message.tag === 'ResourceLoaded') {
       onResourceLoaded(message.resource);
-      enterTitleScreen(ctx, mutableScene, time.now());
-      window.setTimeout(() => {
-        dispatchCustomMessage('a');
-      }, 1000);
+      const cursorId = enterTitleScreen(ctx, mutableScene, time.now());
       return {
         ...state,
-        phase: { tag: 'title' },
+        phase: { tag: 'title', cursorId },
       };
     } else if (message.tag === 'WindowResized') {
       return {

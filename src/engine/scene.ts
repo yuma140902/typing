@@ -37,6 +37,20 @@ export const sceneAddObject = <O>(
   });
 };
 
+export const sceneGetObject = <O>(
+  scene: Scene<O>,
+  id: GenerationalId,
+): SceneObject<O> | undefined => {
+  return scene.objects.get(id);
+};
+
+export const sceneRemoveObject = <O>(
+  scene: Scene<O>,
+  id: GenerationalId,
+): SceneObject<O> | undefined => {
+  return scene.objects.remove(id);
+};
+
 export const sceneClearObjects = <O>(scene: Scene<O>) => {
   scene.objects.clear();
 };
