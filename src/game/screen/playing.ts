@@ -11,21 +11,75 @@ import { GameObject, Rectangle } from '../objects';
 import { easeOut, fixed, linear } from '../scene';
 import { PlayingPhase } from '../state';
 
-const font = '48px IBMPlexSans, IBMPlexSansJP';
+const font = '24px IBMPlexSans, IBMPlexSansJP';
 const textX = 100;
-const textY = 200;
+const textY = 150;
 const cursorWidth = 4;
-const cursorHeight = 60;
+const cursorHeight = 30;
+const cursorYDiff = 24;
 const cursorX = textX;
-const cursorY = textY - 48;
+const cursorY = textY - cursorYDiff;
 const correctTextLayer = 0;
 const typingTextLayer = 1;
 const cursorLayer = 2;
 const timerX = 100;
 const timerY = 100;
 const retryX = 100;
-const retryY = 300;
+const retryY = 200;
 const retryLayer = 3;
+
+export const getRandomText = (): string => {
+  const texts = [
+    'Hello, World!',
+    'print("Hello, World!")',
+    'System.out.println("Hello, World!");',
+    'console.log("Hello, World!");',
+    'puts "Hello, World!"',
+    'echo "Hello, World!";',
+    'fmt.Println("Hello, World!")',
+    'println!("Hello, World!");',
+    '#define ptr_ok(x) ((x) > PAGE_OFFSET && (x) < PAGE_OFFSET + MAXMEM)',
+    '#define BITBIT_SIZE(nr)	(BITBIT_NR(nr) * sizeof(long))',
+    '#define __const_min(x, y) ((x) < (y) ? (x) : (y))',
+    'extern void fpu_idle_fpregs(void);',
+    'globals().update(http.HTTPStatus.__members__)',
+    'git diff -a --stat',
+    'git push --force-with-lease',
+    'git checkout master',
+    'git switch -c feature-pr9821',
+    'git branch -d tuple-branch',
+    'git rebase -i HEAD~3',
+    'git commit --amend --no-edit',
+    'git log --oneline --graph --all',
+    'ls -R .',
+    'npm install --save-dev typescript',
+    'npm run build',
+    'cargo run --release',
+    'docker build -t myimage .',
+    'docker compose up -d',
+    'const result = originalCompile.apply(this, arguments)',
+    'fs.rmSync(tmpdir, { recursive: true, force: true })',
+    'const el2 = createScriptElement()',
+    'Promise.resolve(42).then(console.log)',
+    'All human beings are born free and equal in dignity and rights.',
+    'Everyone has the right to life, liberty and security of person.',
+    'No one may be compelled to belong to an association.',
+    'To be, or not to be, that is the question.',
+    'There is always light behind the clouds.',
+    'Is it just me, or is it getting crazier out there?',
+    'I just hope my death makes more cents than my life.',
+    'There is more to life than increasing its speed.',
+    'Do one thing everyday that scares you.',
+    'If you want to be happy, be.',
+    'Thou shouldst eat to live; not live to eat.',
+    'Drive thy business; let it not drive thee.',
+    'Good artists copy, great artists steal.',
+    'I walk slowly, but I never walk backward.',
+    'The first duty of love is to listen.',
+    'Man errs as long as he strives.',
+  ];
+  return texts[Math.floor(Math.random() * texts.length)];
+};
 
 export const enterPlayingScreen = (
   _ctx: CanvasRenderingContext2D,
@@ -276,7 +330,7 @@ export const onFinished = (
     tag: 'Rectangle',
     fill: 'primary',
     x: easeOut(lastCursor.x.to, retryX, now, time.ms(200)),
-    y: easeOut(lastCursor.y.to, retryY - 48, now, time.ms(200)),
+    y: easeOut(lastCursor.y.to, retryY - cursorYDiff, now, time.ms(200)),
     width: easeOut(lastCursor.width.to, retryWidth, now, time.ms(200)),
     height: fixed(cursorHeight),
   };

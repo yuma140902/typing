@@ -3,7 +3,7 @@ import { time } from '../util';
 import { GameObject } from './objects';
 import { GameResources, onResourceLoaded } from './resources';
 import { enterLoadingScreen } from './screen/loading';
-import { enterPlayingScreen, onType } from './screen/playing';
+import { enterPlayingScreen, getRandomText, onType } from './screen/playing';
 import { enterTitleScreen } from './screen/title';
 import { GameState, PlayingPhase } from './state';
 
@@ -41,7 +41,7 @@ export const getMessageHandler = (
         if (message.event.key === ' ') {
           const phase: PlayingPhase = {
             tag: 'playing',
-            correctText: 'apple banana cherry',
+            correctText: getRandomText(),
             typingText: '',
           };
           const cursorId = enterPlayingScreen(
@@ -61,7 +61,7 @@ export const getMessageHandler = (
         if (message.event.key === 'Enter') {
           const phase: PlayingPhase = {
             tag: 'playing',
-            correctText: 'apple banana cherry',
+            correctText: getRandomText(),
             typingText: '',
           };
           const cursorId = enterPlayingScreen(
