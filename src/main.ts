@@ -1,5 +1,4 @@
 import './style.css';
-import 'ress/ress.css';
 import { start } from './game';
 
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
