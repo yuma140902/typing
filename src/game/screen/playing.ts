@@ -14,7 +14,7 @@ import { PlayingPhase } from '../state';
 const font = '24px IBMPlexSans, IBMPlexSansJP';
 const textX = 100;
 const textY = 150;
-const cursorWidth = 4;
+const cursorWidth = 2;
 const cursorHeight = 30;
 const cursorYDiff = 24;
 const cursorX = textX;
