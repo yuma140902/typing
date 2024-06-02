@@ -1,3 +1,5 @@
+import { Time } from '../util/time';
+
 export type GameState = {
   phase: GamePhase;
   width: number;
@@ -9,6 +11,7 @@ export type Theme = {
   foreground: string;
   background: string;
   primary: string;
+  dimmed: string;
 };
 
 export type GamePhase = LoadingPhase | TitlePhase | PlayingPhase;
@@ -16,7 +19,11 @@ export type LoadingPhase = { tag: 'loading' };
 export type TitlePhase = {
   tag: 'title';
 };
-export type PlayingPhase = { tag: 'playing' };
+export type PlayingPhase = {
+  tag: 'playing';
+  correctText: string;
+  typingText: string;
+};
 
 /**
  *ゲームの初期状態を返す
@@ -30,6 +37,7 @@ export const getInitialGameState = (): GameState => {
       foreground: '#abb2bf',
       background: '#282c34',
       primary: '#61afef',
+      dimmed: '#5c6370',
     },
   };
 };

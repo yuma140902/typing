@@ -3,9 +3,9 @@ import { time } from '../util';
 import { GameObject } from './objects';
 import { GameResources, onResourceLoaded } from './resources';
 import { enterLoadingScreen } from './screen/loading';
-import { enterPlayingScreen } from './screen/playing';
+import { enterPlayingScreen, onType } from './screen/playing';
 import { enterTitleScreen } from './screen/title';
-import { GameState } from './state';
+import { GameState, PlayingPhase } from './state';
 
 export type GameCustomMessage = 'a';
 
@@ -42,12 +42,29 @@ export const getMessageHandler = (
     } else if (message.tag === 'KeyEvent') {
       if (state.phase.tag === 'title') {
         if (message.event.key === ' ') {
-          enterPlayingScreen(ctx, mutableScene, time.now());
+          const phase: PlayingPhase = {
+            tag: 'playing',
+            correctText: 'apple banana cherry',
+            typingText: '',
+          };
+          enterPlayingScreen(ctx, mutableScene, time.now(), phase);
           return {
             ...state,
-            phase: { tag: 'playing' },
+            phase,
           };
         }
+      } else if (state.phase.tag === 'playing') {
+        const phase = onType(
+          ctx,
+          mutableScene,
+          time.now(),
+          state.phase,
+          message.event,
+        );
+        return {
+          ...state,
+          phase,
+        };
       }
     } else if (message.tag === 'Custom') {
     }
