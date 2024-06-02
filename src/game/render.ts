@@ -32,7 +32,7 @@ const formatDuration = (duration: Duration): string => {
 export const getRenderableObjects: GetRenderableObjects<
   GameState,
   GameObject
-> = (state, scene, _deltaTime, now, _ctx) => {
+> = (state, scene, _deltaTime, now, ctx) => {
   let rs: RenderableObject[] = [];
 
   rs.push({
@@ -41,8 +41,8 @@ export const getRenderableObjects: GetRenderableObjects<
     tag: 'rectangle',
     x: 0,
     y: 0,
-    width: state.width,
-    height: state.height,
+    width: ctx.canvas.width,
+    height: ctx.canvas.height,
     fillColor: state.theme.background,
   });
 

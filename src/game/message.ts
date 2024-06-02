@@ -20,6 +20,7 @@ export const getMessageHandler = (
   > = (state, message, mutableScene) => {
     if (message.tag === 'GameInitialized') {
       enterLoadingScreen(ctx, mutableScene, time.now());
+      document.body.style.backgroundColor = state.theme.background;
       return {
         ...state,
       };
@@ -31,6 +32,7 @@ export const getMessageHandler = (
         phase: { tag: 'title', cursorId },
       };
     } else if (message.tag === 'WindowResized') {
+      console.log('resized', message.width, message.height);
       return {
         ...state,
         width: message.width,

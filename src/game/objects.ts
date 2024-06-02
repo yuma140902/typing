@@ -1,6 +1,6 @@
 import { EasingValue } from '../util/easing';
 import { Time } from '../util/time';
-import { Theme } from './state';
+import { Theme } from '../theme';
 
 export type GameObject = Text | Rectangle | Timer;
 
