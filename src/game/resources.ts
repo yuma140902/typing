@@ -1,10 +1,12 @@
 import { type ResourceLoader } from '../engine';
+import font from '../assets/IBMPlexSans-Regular.woff2?url';
+import fontJp from '../assets/IBMPlexSansJP-Regular.woff2?url';
 
 export type GameResources = [FontFace, FontFace];
 
 export const resourceLoader: ResourceLoader<GameResources> = () => {
-  let f1 = new FontFace('IBMPlexSans', 'url(/IBMPlexSans-Regular.woff2)');
-  let f2 = new FontFace('IBMPlexSansJP', 'url(/IBMPlexSansJP-Regular.woff2)');
+  let f1 = new FontFace('IBMPlexSans', `url(${font})`);
+  let f2 = new FontFace('IBMPlexSansJP', `url(${fontJp})`);
   return Promise.all([f1.load(), f2.load()]);
 };
 
