@@ -109,15 +109,24 @@ export const createRenderer = <S, O>(
   };
 };
 
+let animationLoop = false;
+
 export const scheduleRendering = <S, O>(
   renderer: Renderer<S, O>,
   state: S,
   scene: Scene<O>,
+  reason: 'animation' | 'message' = 'message',
 ) => {
+  if (animationLoop && reason === 'message') {
+    return;
+  }
   window.requestAnimationFrame(() => {
     renderer.renderScene(state, scene);
     if (renderer.needsAnimation()) {
-      scheduleRendering(renderer, state, scene);
+      animationLoop = true;
+      scheduleRendering(renderer, state, scene, 'animation');
+    } else {
+      animationLoop = false;
     }
   });
 };
