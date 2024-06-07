@@ -1,9 +1,3 @@
-/**
- * @module 世代型配列
- * 要素の追加、削除、参照を高速に行うことができる。
- * GenerationalIdで要素を追跡することができる．
- */
-
 export type GenerationalId = {
   gen: number;
   index: number;
@@ -14,6 +8,11 @@ export type GenerationalEntry<T> = {
   value: T | undefined;
 };
 
+/**
+ * 要素の追加、削除、参照を高速に行うことができる配列。
+ *
+ * {@link GenerationalId}で要素を追跡することができる。
+ */
 export type GenerationalArray<T> = {
   add: (value: T) => GenerationalId;
   get: (id: GenerationalId) => T | undefined;
