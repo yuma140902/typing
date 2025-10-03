@@ -3,7 +3,7 @@ import {
   sceneAddObject,
   sceneClearObjects,
   sceneGetObject,
-} from '../../engine';
+} from '../../engine/scene';
 import { time } from '../../util';
 import { GenerationalId } from '../../util/generational_array';
 import { Duration, Time } from '../../util/time';

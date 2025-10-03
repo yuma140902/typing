@@ -1,8 +1,6 @@
-import {
-  GetRenderableObjects,
-  RenderableObject,
-  sceneForEachAppearingObjects,
-} from '../engine';
+import { sceneForEachAppearingObjects } from '../engine/scene';
+import { RenderableObject } from '../engine/renderer';
+import { GetRenderableObjects } from '../engine';
 import { time } from '../util';
 import { EasingValue, animateNumber } from '../util/easing';
 import { Duration, Time } from '../util/time';

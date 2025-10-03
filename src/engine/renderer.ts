@@ -3,7 +3,7 @@ import {
   sceneRemoveDisappearedObjects,
   type Scene,
 } from './scene';
-import { GetRenderableObjects } from './engine';
+import { GetRenderableObjects } from '../engine';
 import { time } from '../util';
 import { createFpsCounter } from '../util/fps';
 

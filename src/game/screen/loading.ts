@@ -1,4 +1,4 @@
-import { Scene, sceneAddObject, sceneClearObjects } from '../../engine';
+import { Scene, sceneAddObject, sceneClearObjects } from '../../engine/scene';
 import { time } from '../../util';
 import { Time } from '../../util/time';
 import { GameObject } from '../objects';
